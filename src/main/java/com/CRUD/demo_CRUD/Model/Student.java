@@ -1,4 +1,4 @@
-package com.CRUD.demo_CRUD.DAO;
+package com.CRUD.demo_CRUD.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

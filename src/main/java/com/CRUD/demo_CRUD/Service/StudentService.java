@@ -1,6 +1,6 @@
 package com.CRUD.demo_CRUD.Service;
 
-import com.CRUD.demo_CRUD.DAO.Student;
+import com.CRUD.demo_CRUD.Model.Student;
 import com.CRUD.demo_CRUD.Repo.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

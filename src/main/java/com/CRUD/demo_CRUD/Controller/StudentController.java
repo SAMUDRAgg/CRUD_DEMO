@@ -1,6 +1,6 @@
 package com.CRUD.demo_CRUD.Controller;
 
-import com.CRUD.demo_CRUD.DAO.Student;
+import com.CRUD.demo_CRUD.Model.Student;
 import com.CRUD.demo_CRUD.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
