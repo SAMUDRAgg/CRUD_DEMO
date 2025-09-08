@@ -43,13 +43,13 @@ public class UserController {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            user.getUserName(),
+                            user.getUsername(),
                             user.getPassword()
                     )
             );
 
             if (authentication.isAuthenticated()) {
-                String token = jwtService.generateToken(user.getUserName());
+                String token = jwtService.generateToken(user.getUsername());
 
                 Map<String, String> response = new HashMap<>();
                 response.put("message", "Login Successful");

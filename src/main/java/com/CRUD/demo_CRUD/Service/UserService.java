@@ -17,7 +17,7 @@ public class UserService {
     private userRepo userRepo;
     public Optional<User> addUser(User user) {
 
-        if(userRepo.findByUserName(user.getUserName()).isPresent()){
+        if(userRepo.findByUsername(user.getUsername()).isPresent()){
             return Optional.empty();
         }
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

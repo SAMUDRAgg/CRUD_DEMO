@@ -1,5 +1,6 @@
 package com.CRUD.demo_CRUD.config;
 
+import com.CRUD.demo_CRUD.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.annotation.Bean;
@@ -17,13 +18,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtFilter jwtFilter;
+
     @Autowired
     private UserDetailsService userDetailsService;
+
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -44,26 +52,22 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        //disableing csrf token
-        http.csrf(customizer -> customizer.disable());
+        http.csrf(csrf -> csrf.disable());
 
-        // defines which endpoints need authentication
-        http.authorizeHttpRequests(requst -> requst
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/register", "/login").permitAll()
+                .anyRequest().authenticated()
+        );
 
-                .requestMatchers("/register", "/login").permitAll().anyRequest().authenticated());
+        // Disable httpBasic (we are using JWT, not basic auth)
+        // http.httpBasic(Customizer.withDefaults()); ❌ REMOVE THIS LINE
 
-        // means when we call a end point we must pass the http headers
-        http.httpBasic(Customizer.withDefaults());
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
 
-
-        //Spring will not create or use any session.
-        //
-        //Each request must provide authentication credentials again and again.
-        //
-        //The server does not remember you between requests.
-
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+        // Register your JWT filter before the UsernamePasswordAuthenticationFilter
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 
